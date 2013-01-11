@@ -44,7 +44,7 @@ class Gnuradio < Formula
 
   def install
     mkdir 'build' do
-      args = ["-DCMAKE_PREFIX_PATH=#{prefix}", "-DQWT_INCLUDE_DIRS=#{HOMEBREW_PREFIX}/lib/qwt.framework/Headers"] + std_cmake_args
+      args = ["-DCMAKE_PREFIX_PATH=#{prefix}", "-DQWT_INCLUDE_DIRS=#{HOMEBREW_PREFIX}/lib/qwt.framework/Headers","-DQWT_LIBRARY_DIRS=#{HOMEBREW_PREFIX}/lib/"] + std_cmake_args
       args << '-DENABLE_GR_QTGUI=OFF' unless ARGV.include?('--with-qt')
       args << '-DENABLE_DOXYGEN=OFF' unless ARGV.include?('--with-docs')
       args << "-DPYTHON_LIBRARY=#{python_path}/Frameworks/Python.framework/"
@@ -97,3 +97,50 @@ index 049d4ff..a40502b 100644
   <customwidgets>
    <customwidget>
     <class>QwtWheel</class>
+diff --git a/gnuradio-core/src/lib/io/gri_wavfile.h b/gnuradio-core/src/lib/io/gri_wavfile.h
+index c757be2..88500fd 100644
+--- a/gnuradio-core/src/lib/io/gri_wavfile.h
++++ b/gnuradio-core/src/lib/io/gri_wavfile.h
+@@ -46,7 +46,7 @@
+  * \return True on a successful read, false if the file could not be read or is
+  *         not a valid WAV file.
+  */
+-bool
++GR_CORE_API bool
+ gri_wavheader_parse(FILE *fp,
+ 		    unsigned int &sample_rate,
+ 		    int &nchans,
+@@ -60,7 +60,7 @@ gri_wavheader_parse(FILE *fp,
+  *
+  * Takes care of endianness.
+  */
+-short int
++GR_CORE_API short int
+ gri_wav_read_sample(FILE *fp, int bytes_per_sample);
+ 
+ 
+@@ -71,7 +71,7 @@ gri_wav_read_sample(FILE *fp, int bytes_per_sample);
+  * a-priori (file and chunk lengths). Use gri_wavheader_complete() to fill
+  * these in.
+  */
+-bool
++GR_CORE_API bool
+ gri_wavheader_write(FILE *fp,
+ 		 unsigned int sample_rate,
+ 		 int nchans,
+@@ -82,7 +82,7 @@ gri_wavheader_write(FILE *fp,
+  *
+  * Takes care of endianness.
+  */
+-void
++GR_CORE_API void
+ gri_wav_write_sample(FILE *fp, short int sample, int bytes_per_sample);
+ 
+ 
+@@ -97,5 +97,5 @@ gri_wav_write_sample(FILE *fp, short int sample, int bytes_per_sample);
+  * \p fp File pointer to an open WAV file with a blank header
+  * \p byte_count Length of all samples written to the file in bytes.
+  */
+-bool
++GR_CORE_API bool
+ gri_wavheader_complete(FILE *fp, unsigned int byte_count);
