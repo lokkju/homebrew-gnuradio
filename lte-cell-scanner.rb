@@ -7,6 +7,7 @@ class LteCellScanner < Formula
 
   depends_on 'cmake' => :build
   depends_on 'gnuradio'
+  deponds_on 'itpp'
 
   def install
     mkdir 'build' do
